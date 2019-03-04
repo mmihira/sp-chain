@@ -14,11 +14,10 @@ type Key struct {
 	PrivateKeyInt       *big.Int
 	PrivateKeyBytes     []byte
 	PrivateKeyHexString string
-
-	PublicKeyX       *big.Int
-	PublicKeyXBytes  []byte
-	BtcAddressBytes  []byte
-	BtcAddressString string
+	PublicKeyX          *big.Int
+	PublicKeyXBytes     []byte
+	BtcAddressBytes     []byte
+	BtcAddressString    string
 }
 
 // ImportFromPrivKeyHexString Generate a new key from a privatekey string
@@ -55,10 +54,9 @@ func keyFromLibPrivKey(k *btcec.PrivateKey) Key {
 		PrivateKeyInt:       k.D,
 		PrivateKeyBytes:     k.D.Bytes(),
 		PrivateKeyHexString: hex.EncodeToString(k.D.Bytes()[:]),
-
-		PublicKeyX:       k.PublicKey.X,
-		PublicKeyXBytes:  k.PublicKey.X.Bytes(),
-		BtcAddressBytes:  BtcAddressBytes,
-		BtcAddressString: base58.Encode(BtcAddressBytes),
+		PublicKeyX:          k.PublicKey.X,
+		PublicKeyXBytes:     k.PublicKey.X.Bytes(),
+		BtcAddressBytes:     BtcAddressBytes,
+		BtcAddressString:    base58.Encode(BtcAddressBytes),
 	}
 }
