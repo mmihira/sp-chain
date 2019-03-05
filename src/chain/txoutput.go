@@ -7,7 +7,7 @@ import (
 
 // OutputTx OutputTx
 type OutputTx struct {
-	Value        int32
+	Value        int64
 	ScriptPubKey []byte
 }
 
@@ -25,9 +25,9 @@ func (b *OutputTx) Ser() *bytes.Buffer {
 	return &ret
 }
 
-// Deserialize Deserialze bytes to OutputTx
-func DeserializeOutputTx(b *bytes.Buffer) OutputTx {
-	var readValue int32
+// DeserialiseOutputTx Deserialze bytes to OutputTx
+func DeserialiseOutputTx(b *bytes.Buffer) OutputTx {
+	var readValue int64
 	binary.Read(b, littleEndian, &readValue)
 
 	// Read the ScriptPub

@@ -20,7 +20,7 @@ func TestTxInputSerDer(t *testing.T) {
 	}
 
 	ser := txinput.Ser()
-	txinputdes := Deserialize(ser)
+	txinputdes := DeserialiseInputTx(ser)
 
 	if slen := txinput.ScriptSigLen(); int(slen) != 4 {
 		t.Errorf("ScriptSigLen go %d, expect %d", slen, 4)

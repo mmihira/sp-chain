@@ -7,6 +7,7 @@ import (
 
 var littleEndian = binary.LittleEndian
 
+// InputTx Input Transaction
 type InputTx struct {
 	Txid      int32
 	OutInx    int32
@@ -30,8 +31,8 @@ func (b *InputTx) Ser() *bytes.Buffer {
 	return &ret
 }
 
-// Deserialize Deserialze bytes to InputTx
-func Deserialize(b *bytes.Buffer) InputTx {
+// DeserialiseInputTx Deserialze bytes to InputTx
+func DeserialiseInputTx(b *bytes.Buffer) InputTx {
 	var readTxID int32
 	binary.Read(b, littleEndian, &readTxID)
 
