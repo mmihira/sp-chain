@@ -14,7 +14,7 @@ func TestTxOutputSerDer(t *testing.T) {
 	}
 
 	ser := txoutput.Ser()
-	txoutputdes:= DeserializeOutputTx(ser)
+	txoutputdes:= DeserialiseOutputTx(ser)
 
 	if slen := txoutputdes.ScriptPubLen(); int(slen) != 4 {
 		t.Errorf("ScriptPubLen go %d, expect %d", slen, 4)
