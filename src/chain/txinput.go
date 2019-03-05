@@ -38,7 +38,6 @@ func Deserialize(b *bytes.Buffer) InputTx {
 	var readOutInx int32
 	binary.Read(b, littleEndian, &readOutInx)
 
-
 	// Read the ScriptSig
 	lenToRead := byte(0)
 	binary.Read(b, littleEndian, &lenToRead)
