@@ -1,23 +1,23 @@
 package script
 
 import (
-	"testing"
 	"encoding/hex"
+	"testing"
 )
 
 func TestPubKeyV1(t *testing.T) {
-	key := []byte{1,2,3}
+	key := []byte{1, 2, 3}
 
 	script := Stack{
 		[]Operand{
-			PUB_KEY_V1{ Key: key },
+			PUB_KEY_V1{Key: key},
 		},
 	}
 
 	stack := Stack{}
 	ctxt := ScriptContext{}
 
-	result := true;
+	result := true
 	for _, s := range script.Contents {
 		opResult, err := s.Work(&stack, &ctxt)
 		result = result && opResult
@@ -26,7 +26,7 @@ func TestPubKeyV1(t *testing.T) {
 		}
 	}
 
-	if _, ok := stack.Top().(PUB_KEY_V1) ; !ok {
+	if _, ok := stack.Top().(PUB_KEY_V1); !ok {
 		t.Errorf("Expected type: %#v", PUB_KEY_V1{})
 	}
 
@@ -36,11 +36,11 @@ func TestPubKeyV1(t *testing.T) {
 }
 
 func TestOpDup(t *testing.T) {
-	key := []byte{1,2,3}
+	key := []byte{1, 2, 3}
 
 	script := Stack{
 		[]Operand{
-			PUB_KEY_V1{ Key: key },
+			PUB_KEY_V1{Key: key},
 			OP_DUP{},
 		},
 	}
@@ -48,7 +48,7 @@ func TestOpDup(t *testing.T) {
 	stack := Stack{}
 	ctxt := ScriptContext{}
 
-	result := true;
+	result := true
 	for _, s := range script.Contents {
 		opResult, err := s.Work(&stack, &ctxt)
 		result = result && opResult
@@ -57,11 +57,11 @@ func TestOpDup(t *testing.T) {
 		}
 	}
 
-	if _, ok := stack.Top().(PUB_KEY_V1) ; !ok {
+	if _, ok := stack.Top().(PUB_KEY_V1); !ok {
 		t.Errorf("Expected type: %#v", PUB_KEY_V1{})
 	}
 
-	if _, ok := stack.Second().(PUB_KEY_V1) ; !ok {
+	if _, ok := stack.Second().(PUB_KEY_V1); !ok {
 		t.Errorf("Expected type: %#v", PUB_KEY_V1{})
 	}
 
@@ -71,11 +71,11 @@ func TestOpDup(t *testing.T) {
 }
 
 func TestOpEqualVerify(t *testing.T) {
-	key := []byte{1,2,3}
+	key := []byte{1, 2, 3}
 
 	script := Stack{
 		[]Operand{
-			PUB_KEY_V1{ Key: key },
+			PUB_KEY_V1{Key: key},
 			OP_DUP{},
 			OP_EQUALVERIFY{},
 		},
@@ -84,7 +84,7 @@ func TestOpEqualVerify(t *testing.T) {
 	stack := Stack{}
 	ctxt := ScriptContext{}
 
-	result := true;
+	result := true
 	for _, s := range script.Contents {
 		opResult, err := s.Work(&stack, &ctxt)
 		result = result && opResult
@@ -102,13 +102,13 @@ func TestOpEqualVerify(t *testing.T) {
 	}
 }
 
-func TestOpHash160(t * testing.T) {
+func TestOpHash160(t *testing.T) {
 	hexString := "0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352"
 	key, _ := hex.DecodeString(hexString)
 
 	script := Stack{
 		[]Operand{
-			PUB_KEY_V1{ Key: key },
+			PUB_KEY_V1{Key: key},
 			OP_HASH_160{},
 		},
 	}
@@ -116,7 +116,7 @@ func TestOpHash160(t * testing.T) {
 	stack := Stack{}
 	ctxt := ScriptContext{}
 
-	result := true;
+	result := true
 	for _, s := range script.Contents {
 		opResult, err := s.Work(&stack, &ctxt)
 		result = result && opResult

@@ -1,12 +1,11 @@
 package script
 
 import (
-	"testing"
 	"spchain/chain"
 	"spchain/key"
 	"strconv"
+	"testing"
 )
-
 
 func createTxInput() chain.InputTx {
 	hexString := "029a"
@@ -26,7 +25,7 @@ func createTxOutput() chain.OutputTx {
 	}
 }
 
-func TestCheckSig(t * testing.T) {
+func TestCheckSig(t *testing.T) {
 	tx := chain.Tx{
 		Version:  10,
 		TxInNo:   1,
@@ -44,16 +43,16 @@ func TestCheckSig(t * testing.T) {
 
 	script := Stack{
 		[]Operand{
-			SIG { sig.Serialize() },
-			PUB_KEY_V1 { key.PublicKey.SerializeCompressed() },
+			SIG{sig.Serialize()},
+			PUB_KEY_V1{key.PublicKey.SerializeCompressed()},
 			OP_CHECKSIG{},
 		},
 	}
 
 	stack := Stack{}
-	ctxt := ScriptContext{ &tx }
+	ctxt := ScriptContext{&tx}
 
-	result := true;
+	result := true
 	for _, s := range script.Contents {
 		opResult, err := s.Work(&stack, &ctxt)
 		result = result && opResult

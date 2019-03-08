@@ -1,20 +1,20 @@
 package chain
 
 import (
-	"testing"
 	"bytes"
+	"testing"
 )
 
 // TextTxOutputSerDer Test serialisation and deserialisation
 func TestTxOutputSerDer(t *testing.T) {
 	scriptpubkey := []byte{20, 20, 20, 20}
 	txoutput := OutputTx{
-		Value: 20000,
+		Value:        20000,
 		ScriptPubKey: scriptpubkey,
 	}
 
 	ser := txoutput.Ser()
-	txoutputdes:= DeserialiseOutputTx(ser)
+	txoutputdes := DeserialiseOutputTx(ser)
 
 	if slen := txoutputdes.ScriptPubLen(); int(slen) != 4 {
 		t.Errorf("ScriptPubLen go %d, expect %d", slen, 4)

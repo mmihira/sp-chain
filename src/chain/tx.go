@@ -3,6 +3,7 @@ package chain
 import (
 	"bytes"
 	"encoding/binary"
+	"github.com/btcsuite/btcd/btcec"
 )
 
 // Tx An sp-chain transaction
@@ -77,4 +78,10 @@ func (tx *Tx) SerialiseForSign() *bytes.Buffer {
 	}
 	binary.Write(&buffer, littleEndian, tx.LockTime)
 	return &buffer
+}
+
+// Sign this transaction assuming a SIGHASH_ALL SIGHASH type
+func (tx *Tx) SignWithKey(pKey *btcec.PrivateKey) (*btcec.Signature, error) {
+	ser := tx.SerialiseForSign()
+	return pKey.Sign(ser.Bytes())
 }
