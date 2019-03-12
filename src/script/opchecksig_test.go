@@ -50,11 +50,10 @@ func TestCheckSig(t *testing.T) {
 	}
 
 	stack := Stack{}
-	ctxt := ScriptContext{&tx}
 
 	result := true
 	for _, s := range script.Contents {
-		opResult, err := s.Work(&stack, &ctxt)
+		opResult, err := s.Work(&stack, &tx)
 		result = result && opResult
 		if err != nil {
 			t.Errorf(err.Error())

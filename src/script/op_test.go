@@ -2,8 +2,14 @@ package script
 
 import (
 	"encoding/hex"
+	"bytes"
 	"testing"
 )
+
+type fakedScriptContext struct {}
+func (f *fakedScriptContext) SerialiseForSign() *bytes.Buffer {
+	return &bytes.Buffer{}
+}
 
 func TestPubKeyV1(t *testing.T) {
 	key := []byte{1, 2, 3}
@@ -15,7 +21,7 @@ func TestPubKeyV1(t *testing.T) {
 	}
 
 	stack := Stack{}
-	ctxt := ScriptContext{}
+	ctxt := fakedScriptContext{}
 
 	result := true
 	for _, s := range script.Contents {
@@ -46,7 +52,7 @@ func TestOpDup(t *testing.T) {
 	}
 
 	stack := Stack{}
-	ctxt := ScriptContext{}
+	ctxt := fakedScriptContext{}
 
 	result := true
 	for _, s := range script.Contents {
@@ -82,7 +88,7 @@ func TestOpEqualVerify(t *testing.T) {
 	}
 
 	stack := Stack{}
-	ctxt := ScriptContext{}
+	ctxt := fakedScriptContext{}
 
 	result := true
 	for _, s := range script.Contents {
@@ -114,7 +120,7 @@ func TestOpHash160(t *testing.T) {
 	}
 
 	stack := Stack{}
-	ctxt := ScriptContext{}
+	ctxt := fakedScriptContext{}
 
 	result := true
 	for _, s := range script.Contents {

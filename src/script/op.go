@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/btcsuite/btcd/btcec"
 	"golang.org/x/crypto/ripemd160"
-	"spchain/chain"
 )
 
 /*
@@ -38,8 +37,8 @@ func ripe160sha256(b []byte) []byte {
 
 // ScriptContext Context which the operands can use when doing
 // their operations
-type ScriptContext struct {
-	Tx *chain.Tx
+type ScriptContext interface {
+	SerialiseForSign() *bytes.Buffer
 }
 
 // ByteRepresentation Interface for OP_CODES to be represented
@@ -57,7 +56,7 @@ type HasName interface {
 
 // Operand interface
 type Operand interface {
-	Work(*Stack, *ScriptContext) (bool, error)
+	Work(*Stack, ScriptContext) (bool, error)
 	Copy() Operand
 	ByteRepresentation
 	HasName
@@ -66,7 +65,7 @@ type Operand interface {
 // OP_DUP Duplicates the top stack item
 type OP_DUP struct{}
 
-func (OP_DUP) Work(s *Stack, w *ScriptContext) (bool, error) {
+func (OP_DUP) Work(s *Stack, w ScriptContext) (bool, error) {
 	s.DuplicateTop()
 	return true, nil
 }
@@ -83,7 +82,7 @@ func (OP_DUP) Copy() Operand {
 // The top stack value is removed.
 type OP_EQUALVERIFY struct{}
 
-func (OP_EQUALVERIFY) Work(s *Stack, w *ScriptContext) (bool, error) {
+func (OP_EQUALVERIFY) Work(s *Stack, w ScriptContext) (bool, error) {
 	first := s.Top()
 	second := s.Second()
 	firstT, _ := first.(ByteRepresentation)
@@ -111,8 +110,8 @@ func (s OP_EQUALVERIFY) Copy() Operand {
 // We assume all sigs to be chcked as SIGH_HASH_ALL
 type OP_CHECKSIG struct{}
 
-func (OP_CHECKSIG) Work(s *Stack, w *ScriptContext) (bool, error) {
-	txHash := w.Tx.SerialiseForSign()
+func (OP_CHECKSIG) Work(s *Stack, w ScriptContext) (bool, error) {
+	txHash := w.SerialiseForSign()
 
 	pubKey := s.Top()
 	if _, ok := pubKey.(PUB_KEY_V1); !ok {
@@ -161,7 +160,7 @@ func (s OP_CHECKSIG) Copy() Operand {
 // SIG a signature value
 type SIG struct{ Sig []byte }
 
-func (p SIG) Work(s *Stack, w *ScriptContext) (bool, error) {
+func (p SIG) Work(s *Stack, w ScriptContext) (bool, error) {
 	s.Push(p.Copy())
 	return true, nil
 }
@@ -176,7 +175,7 @@ func (s SIG) Copy() Operand {
 // PUB_KEY_V1 A version 1 pub_key
 type PUB_KEY_V1 struct{ Key []byte }
 
-func (p PUB_KEY_V1) Work(s *Stack, w *ScriptContext) (bool, error) {
+func (p PUB_KEY_V1) Work(s *Stack, w ScriptContext) (bool, error) {
 	s.Push(p.Copy())
 	return true, nil
 }
@@ -191,7 +190,7 @@ func (op PUB_KEY_V1) Copy() Operand {
 // PUB_K_HASH A version 1 pub_key
 type PUB_KEY_HASH struct{ Key []byte }
 
-func (p PUB_KEY_HASH) Work(s *Stack, w *ScriptContext) (bool, error) {
+func (p PUB_KEY_HASH) Work(s *Stack, w ScriptContext) (bool, error) {
 	s.Push(p.Copy())
 	return true, nil
 }
@@ -208,7 +207,7 @@ func (op PUB_KEY_HASH) Copy() Operand {
 // We check that it is an operand of type PUB_KEY_V1
 type OP_HASH_160 struct{}
 
-func (OP_HASH_160) Work(s *Stack, w *ScriptContext) (bool, error) {
+func (OP_HASH_160) Work(s *Stack, w ScriptContext) (bool, error) {
 	top := s.Top().Data()
 	_, ok := s.Top().(PUB_KEY_V1)
 	if !ok {
