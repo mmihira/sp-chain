@@ -2,18 +2,16 @@ package chain
 
 import (
 	"bytes"
-	"strconv"
 	"testing"
+	"spchain/util"
 )
 
 // TestTxInputSerDer Test serialisation and deserialisation
 func TestTxInputSerDer(t *testing.T) {
-	hexString := "029a"
-	txid, _ := strconv.ParseUint(hexString, 16, 32)
-	txid32 := int32(txid)
+	txid32 := util.Init32byteArray(0x01)
 	scriptsig := []byte{20, 20, 20, 20}
 	txinput := InputTx{
-		Txid:      txid32,
+		Txid:      txid32[:],
 		OutInx:    0,
 		ScriptSig: scriptsig,
 		Sequence:  0,
@@ -30,7 +28,7 @@ func TestTxInputSerDer(t *testing.T) {
 		t.Errorf("ScriptSig %#v expected: %#v", txinput.ScriptSig, scriptsig)
 	}
 
-	if txinputdes.Txid != txid32 {
+	if !bytes.Equal(txinput.Txid, txid32[:]) {
 		t.Errorf("Txid doesn't equal")
 	}
 

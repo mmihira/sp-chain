@@ -2,17 +2,15 @@ package chain
 
 import (
 	"bytes"
-	"strconv"
 	"testing"
+	"spchain/util"
 )
 
 func createTxInput() InputTx {
-	hexString := "029a"
-	txid, _ := strconv.ParseUint(hexString, 16, 32)
-	txid32 := int32(txid)
+	txid32 := util.Init32byteArray(0x01)
 	scriptsig := []byte{20, 20, 20, 20}
 	return InputTx{
-		Txid:      txid32,
+		Txid:      txid32[:],
 		OutInx:    0,
 		ScriptSig: scriptsig,
 		Sequence:  0,

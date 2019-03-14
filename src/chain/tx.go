@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"github.com/btcsuite/btcd/btcec"
+	"crypto/sha256"
 )
 
 // Tx An sp-chain transaction
@@ -14,6 +15,15 @@ type Tx struct {
 	Vin      []InputTx
 	Vout     []OutputTx
 	LockTime int32
+}
+
+// Hash The transaction hash is the double SHA256 hash of the transaction
+// This is also the id of the transaction
+func (tx *Tx) Hash() [32]byte {
+	ser := tx.Serialise().Bytes()
+	sha1 := sha256.Sum256(ser)
+	sha2 := sha256.Sum256(sha1[:])
+	return sha2
 }
 
 // Serialise Serialise the transaction
@@ -69,12 +79,12 @@ func (tx *Tx) SerialiseForSign() *bytes.Buffer {
 	var buffer bytes.Buffer
 	binary.Write(&buffer, littleEndian, tx.Version)
 	binary.Write(&buffer, littleEndian, tx.TxInNo)
-	for _, tx := range tx.Vin {
-		binary.Write(&buffer, littleEndian, tx.SerSigning())
+	for _, input := range tx.Vin {
+		binary.Write(&buffer, littleEndian, input.SerSigning())
 	}
 	binary.Write(&buffer, littleEndian, tx.TxOutNo)
-	for _, tx := range tx.Vout {
-		binary.Write(&buffer, littleEndian, tx.Ser().Bytes())
+	for _, output := range tx.Vout {
+		binary.Write(&buffer, littleEndian, output.Ser().Bytes())
 	}
 	binary.Write(&buffer, littleEndian, tx.LockTime)
 	return &buffer

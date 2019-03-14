@@ -2,16 +2,17 @@ package chain
 
 import (
 	"bytes"
+	"spchain/util"
 	"encoding/binary"
 )
 
-var littleEndian = binary.LittleEndian
-
 // InputTx Input Transaction
 type InputTx struct {
-	Txid      int32
+	//Txid This must  be 32 byte value
+	Txid      []byte
 	OutInx    int32
 	ScriptSig []byte
+	// Delete sequence
 	Sequence  int32
 }
 
@@ -33,7 +34,7 @@ func (b *InputTx) Ser() *bytes.Buffer {
 
 // DeserialiseInputTx Deserialze bytes to InputTx
 func DeserialiseInputTx(b *bytes.Buffer) InputTx {
-	var readTxID int32
+	var readTxID = util.Init32byteArray(0x00)
 	binary.Read(b, littleEndian, &readTxID)
 
 	var readOutInx int32
@@ -54,7 +55,7 @@ func DeserialiseInputTx(b *bytes.Buffer) InputTx {
 	binary.Read(b, littleEndian, &readSequence)
 
 	return InputTx{
-		Txid:      readTxID,
+		Txid:      readTxID[:],
 		OutInx:    readOutInx,
 		ScriptSig: readScriptSig,
 		Sequence:  readSequence,
