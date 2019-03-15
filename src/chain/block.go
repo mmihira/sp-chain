@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"spchain/db"
 	"spchain/util"
 )
@@ -35,6 +36,12 @@ func (b *Block) Hash() [32]byte {
 	sha1 := sha256.Sum256(ser)
 	sha2 := sha256.Sum256(sha1[:])
 	return sha2
+}
+
+// HashString The block hash as a hex encoded string
+func (b *Block) HashString() string {
+	hash := b.Hash()
+	return hex.EncodeToString(hash[:])
 }
 
 type MerkelResult struct {
@@ -77,7 +84,7 @@ func (b *Block) CalcMerkle() MerkelResult {
 			ret = append(ret, combinedHash)
 		}
 	}
-	return MerkelResult {
+	return MerkelResult{
 		Path: ret,
 		Root: ret[len(ret)-1],
 	}
@@ -98,13 +105,18 @@ func DeserialiseBlock(buff *bytes.Buffer) Block {
 	return ret
 }
 
-// GetBlock Get a block from the database for a
-// given blockhash
-func GetBlock(blockHash string, db db.Interface) Block {
-	buff, _ := db.GetBlock(blockHash)
-	return DeserialiseBlock(buff)
+// GetBlock
+func GetBlock(hash string, db db.Interface) (Block, error) {
+	buff, err := db.GetBlock(hash)
+	if err != nil {
+		return Block{}, err
+	}
+
+	return DeserialiseBlock(buff), nil
 }
 
 // Save this block into the database
-// func Save(db db.Interface) error {
-// }
+func (b* Block) Save(db db.Interface) error {
+	hashStr := b.HashString()
+	return db.SaveBlock(hashStr, b.Ser())
+}

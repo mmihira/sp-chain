@@ -2,6 +2,7 @@ package chain
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/binary"
 )
 
@@ -28,6 +29,14 @@ func (b BlockHeader) Ser() *bytes.Buffer {
 	binary.Write(&ret, littleEndian, b.DifficultyTarget)
 	binary.Write(&ret, littleEndian, b.Nonce)
 	return &ret
+}
+
+// Hash calcuate double SHA256 of header
+func (b *BlockHeader) Hash() [32]byte {
+	ser := b.Ser().Bytes()
+	sha1 := sha256.Sum256(ser)
+	sha2 := sha256.Sum256(sha1[:])
+	return sha2
 }
 
 // DeserialiseBlockHeader Deserialise the blockheader

@@ -47,6 +47,10 @@ func TestTxSerDer(t *testing.T) {
 		t.Errorf("TxInNo %#v expected: %#v", detx.TxInNo, tx.TxInNo)
 	}
 
+	if detx.TxOutNo != tx.TxOutNo {
+		t.Errorf("TxOutNo %#v expected: %#v", detx.TxOutNo, tx.TxOutNo)
+	}
+
 	if len(detx.Vin) != len(tx.Vin) {
 		t.Errorf("TxInNo %#v expected: %#v", 1, 1)
 	}

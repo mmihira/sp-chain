@@ -2,6 +2,7 @@ package chain
 
 import (
 	"github.com/davecgh/go-spew/spew"
+	"bytes"
 	"spchain/key"
 	"spchain/script"
 	"spchain/util"
@@ -77,10 +78,7 @@ func TestMerkle(t *testing.T) {
 		TxCount:      1,
 		Transactions: []Tx{createTxBlockTest()},
 	}
-
-	merkle := block.CalcMerkle()
-	spew.Dump(merkle)
-	t.Errorf("Size %#v", merkle)
+	block.CalcMerkle()
 }
 
 // TestBlockSerialisation Test serialisation and deserialisation
@@ -99,7 +97,18 @@ func TestBlockSerialisation(t *testing.T) {
 		t.Errorf("Size %#v expected: %#v", dser.Size, block.Size)
 	}
 
+	if dser.Header.Nonce != block.Header.Nonce {
+		t.Errorf("Header Nonce expected %#v, got %#v", block.Header.Nonce, dser.Header.Nonce)
+	}
+
 	if dser.TxCount != block.TxCount {
 		t.Errorf("TxCount %#v expected: %#v", dser.TxCount, block.TxCount)
+	}
+
+	deserialisedTx0Hash := dser.Transactions[0].Hash()
+	originalTx0Hash := block.Transactions[0].Hash()
+	if bytes.Equal( deserialisedTx0Hash[:], originalTx0Hash[:]) {
+		spew.Dump("Expected tx hash", originalTx0Hash, "got",  deserialisedTx0Hash)
+		t.Errorf("Transactions incorrectly serialised")
 	}
 }

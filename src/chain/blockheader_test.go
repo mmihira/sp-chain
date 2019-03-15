@@ -54,4 +54,10 @@ func TestBlockHeaderSerialisation(t *testing.T) {
 	if dser.DifficultyTarget != header.DifficultyTarget {
 		t.Errorf("DifficultyTarget %#v expected: %#v", dser.DifficultyTarget, header.DifficultyTarget)
 	}
+
+	orgHash := header.Hash()
+	newHash := dser.Hash()
+	if !bytes.Equal(orgHash[:], newHash[:]) {
+		t.Errorf("Block header hashes don't match")
+	}
 }

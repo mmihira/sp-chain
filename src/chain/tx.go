@@ -67,6 +67,7 @@ func DeserialiseTx(b *bytes.Buffer) Tx {
 	return Tx{
 		Version:  readVersion,
 		TxInNo:   readTxInNo,
+		TxOutNo:  readTxOutNo,
 		Vin:      inputtxs,
 		Vout:     outputtx,
 		LockTime: readLockTime,
