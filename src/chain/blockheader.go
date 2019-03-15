@@ -12,10 +12,10 @@ type BlockHeader struct {
 	// Should be 32 bytes
 	PrevBlockHash []byte
 	// Should be 32 bytes
-	MerkleRoot []byte
-	TimeStamp int64
+	MerkleRoot       []byte
+	TimeStamp        int64
 	DifficultyTarget int32
-	Nonce int32
+	Nonce            int32
 }
 
 // Ser Serialise the blockheader

@@ -2,9 +2,9 @@ package chain
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/binary"
 	"github.com/btcsuite/btcd/btcec"
-	"crypto/sha256"
 )
 
 // Tx An sp-chain transaction

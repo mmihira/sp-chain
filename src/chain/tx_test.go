@@ -2,8 +2,8 @@ package chain
 
 import (
 	"bytes"
-	"testing"
 	"spchain/util"
+	"testing"
 )
 
 func createTxInput() InputTx {

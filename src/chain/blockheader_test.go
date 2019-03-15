@@ -1,9 +1,9 @@
 package chain
 
 import (
-	"testing"
 	"bytes"
 	"encoding/hex"
+	"testing"
 )
 
 func mockBlockHeader() BlockHeader {
@@ -13,7 +13,7 @@ func mockBlockHeader() BlockHeader {
 	prevBlockHashBinary, _ := hex.DecodeString(prevBlockHash)
 	merkleRootBinary, _ := hex.DecodeString(merkleRoot)
 
-	return BlockHeader {
+	return BlockHeader{
 		545259520,
 		prevBlockHashBinary,
 		merkleRootBinary,
@@ -22,8 +22,6 @@ func mockBlockHeader() BlockHeader {
 		440532392,
 	}
 }
-
-
 
 // TestBlockHeaderSerialisation Test serialisation and deserialisation
 func TestBlockHeaderSerialisation(t *testing.T) {
@@ -42,18 +40,18 @@ func TestBlockHeaderSerialisation(t *testing.T) {
 	}
 
 	if dser.Version != header.Version {
-		t.Errorf("Version %#v expected: %#v", dser.Version , header.Version)
+		t.Errorf("Version %#v expected: %#v", dser.Version, header.Version)
 	}
 
-	if dser.TimeStamp != header.TimeStamp{
+	if dser.TimeStamp != header.TimeStamp {
 		t.Errorf("Timestamp %#v expected: %#v", dser.TimeStamp, header.TimeStamp)
 	}
 
-	if dser.Nonce != header.Nonce{
+	if dser.Nonce != header.Nonce {
 		t.Errorf("Nonce %#v expected: %#v", dser.Nonce, header.Nonce)
 	}
 
-	if dser.DifficultyTarget != header.DifficultyTarget{
+	if dser.DifficultyTarget != header.DifficultyTarget {
 		t.Errorf("DifficultyTarget %#v expected: %#v", dser.DifficultyTarget, header.DifficultyTarget)
 	}
 }

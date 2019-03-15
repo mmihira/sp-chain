@@ -2,8 +2,8 @@ package chain
 
 import (
 	"bytes"
-	"spchain/util"
 	"encoding/binary"
+	"spchain/util"
 )
 
 // InputTx Input Transaction
@@ -13,7 +13,7 @@ type InputTx struct {
 	OutInx    int32
 	ScriptSig []byte
 	// Delete sequence
-	Sequence  int32
+	Sequence int32
 }
 
 // ScriptSigLen the length of the ScriptSig

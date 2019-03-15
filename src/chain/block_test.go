@@ -1,11 +1,11 @@
 package chain
 
 import (
+	"github.com/davecgh/go-spew/spew"
 	"spchain/key"
 	"spchain/script"
-	"testing"
 	"spchain/util"
-	"github.com/davecgh/go-spew/spew"
+	"testing"
 )
 
 func createTxOutputBlockTest() OutputTx {
@@ -71,10 +71,10 @@ func createTxBlockTest() Tx {
 }
 
 func TestMerkle(t *testing.T) {
-	block := Block {
-		Size: 30,
-		Header: mockBlockHeader(),
-		TxCount: 1,
+	block := Block{
+		Size:         30,
+		Header:       mockBlockHeader(),
+		TxCount:      1,
 		Transactions: []Tx{createTxBlockTest()},
 	}
 
@@ -85,10 +85,10 @@ func TestMerkle(t *testing.T) {
 
 // TestBlockSerialisation Test serialisation and deserialisation
 func TestBlockSerialisation(t *testing.T) {
-	block := Block {
-		Size: 30,
-		Header: mockBlockHeader(),
-		TxCount: 1,
+	block := Block{
+		Size:         30,
+		Header:       mockBlockHeader(),
+		TxCount:      1,
 		Transactions: []Tx{createTxBlockTest()},
 	}
 
